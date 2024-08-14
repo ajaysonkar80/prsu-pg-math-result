@@ -1,8 +1,6 @@
 import streamlit as st
-import requests
-import re
 import base64
-from bs4 import BeautifulSoup
+
 
 #e_ means encrypted 
 def encrypt(text):
