@@ -1,11 +1,63 @@
 import streamlit as st
-import base64
+#import requests
+#import re
+#import base64
+#from bs4 import BeautifulSoup
+
+class Base64(object):
+    CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+
+    def chunk(self, data, length):
+        return [data[i:i+length] for i in range(0, len(data), length)]
+
+    def encode(self, data):
+        override = 0
+        if len(data) % 3 != 0:
+            override = (len(data) + 3 - len(data) % 3) - len(data)
+        data += b"\x00"*override
+
+        threechunks = self.chunk(data, 3)
+
+        binstring = ""
+        for chunk in threechunks:
+            for x in chunk:
+                binstring += "{:0>8}".format(bin(x)[2:])
+
+        sixchunks = self.chunk(binstring, 6)
+
+        outstring = ""
+        for element in sixchunks:
+            outstring += self.CHARS[int(element, 2)]
+        
+        outstring = outstring[:-override] + "="*override
+        return outstring
+
+    def decode(self, data):
+        override = data.count("=")
+        data = data.replace("=", "A")
+        
+        binstring = ""
+        for char in data:
+            binstring += "{:0>6b}".format(self.CHARS.index(char))
+
+        eightchunks = self.chunk(binstring, 8)
+        
+        outbytes = b""
+        for chunk in eightchunks:
+            outbytes += bytes([int(chunk, 2)])
+
+        return outbytes[:-override]
 
 
+b64 = Base64()
+def encrypt(text):
+    return b64.encode(bytes(text,'utf-8'))
+
+"""
 #e_ means encrypted 
 def encrypt(text):
     return base64.b64encode(text.encode('utf-8')).decode('utf-8')
-
+"""
 #chose 23 or 22
 st_year=st.radio("Chose Year",["23","22"])
 year='23' if False else '22'
