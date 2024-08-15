@@ -53,11 +53,7 @@ b64 = Base64()
 def encrypt(text):
     return b64.encode(bytes(text,'utf-8'))
 
-"""
-#e_ means encrypted 
-def encrypt(text):
-    return base64.b64encode(text.encode('utf-8')).decode('utf-8')
-"""
+
 #chose 23 or 22
 st_year=st.radio("Chose Year",["23","22"])
 year='23' if False else '22'
